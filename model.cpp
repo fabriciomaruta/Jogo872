@@ -1,6 +1,38 @@
 #include "model.hpp"
 #include <ncurses.h>
 
+Tela::Tela(int maxI, int maxJ, float maxX, float maxY){
+  this->maxI = maxI;
+  this->maxJ = maxJ;
+  this->maxX = maxX;
+  this->maxY = maxY;
+
+}
+
+void Tela::init(){
+  initscr(); /*Start curses mode*/
+  raw();
+  curs_set(0);
+}
+
+void Tela::update(int new_pos_i, int new_pos_j){
+  int i ;
+  int linha, coluna;
+  getmaxyx(stdscr, linha, coluna); /*linha e coluna armazenam o tamanho da tela*/
+  if(i<linha && i > 0){ /*Verifica se esta nos limites*/
+    move(new_pos_i, new_pos_j);
+  }
+  echochar(' ');
+  if(i<0){
+    i=0;
+  }
+
+
+}
+
+
+
+
 
 Teclado::Teclado(){
 }

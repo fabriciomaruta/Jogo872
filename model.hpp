@@ -13,7 +13,7 @@ class Tela{
     ~Tela();
     void init();
     void stop();
-    void update();
+    void update(int new_pos_i, int new_pos_j);
 
 };
 
