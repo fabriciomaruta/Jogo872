@@ -9,9 +9,16 @@ class Tela{
     float maxX, maxY;
 
   public:
-    void update(float delta);
+    Tela(int maxI, int maxJ, float maxX, float maxY);
+    ~Tela();
+    void init();
+    void stop();
+    void update();
 
-}
+};
+
+void threadfun(char *keybuffer, int *control);
+
 class Teclado {
 private:
   char ultima_captura;
