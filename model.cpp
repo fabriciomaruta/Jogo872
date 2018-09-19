@@ -1,10 +1,27 @@
 #include "model.hpp"
 #include <ncurses.h>
 
+Corpo::Corpo(char avatar, float velocidade, float posicao) {
+  this->avatar = avatar;/*bonequinho do player ou inimigo*/
+  this->velocidade = velocidade;
+  this->posicao = posicao;
+
+}
+
+
 
 ListaDeCorpos::ListaDeCorpos() {
   this->corpos = new std::vector<Corpo *>(0);
 }
+void ListaDeCorpos::add_corpo(Corpo *c) {
+  (this->corpos)->push_back(c);
+}
+
+std::vector<Corpo*> *ListaDeCorpos::get_corpos() {
+  return (this->corpos);
+}
+
+
 Tela::Tela(int maxI, int maxJ, float maxX, float maxY){
   this->maxI = maxI;
   this->maxJ = maxJ;

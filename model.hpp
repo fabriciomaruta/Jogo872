@@ -5,13 +5,15 @@
 class Corpo { /*Classe para criar o personagem e as caracteristicas*/
   private:
   char avatar; /*Caractere que define o personagem*/
-  float massa;
   float velocidade;
   float posicao;
-  float aceleracao;
+
 
   public:
-
+  Corpo(char avatar, float velocidade, float posicao);
+  void update(float nova_velocidade,float nova_posicao);
+  float get_velocidade();
+  float get_posicao();
 };
 class ListaDeCorpos { /*Classe para controlar lista de "personagens"*/
  private:
