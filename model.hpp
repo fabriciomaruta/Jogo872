@@ -2,7 +2,28 @@
 #define MODEL_HPP
 
 #include<thread>
+class Corpo { /*Classe para criar o personagem e as caracteristicas*/
+  private:
+  char avatar; /*Caractere que define o personagem*/
+  float massa;
+  float velocidade;
+  float posicao;
+  float aceleracao;
 
+  public:
+
+};
+class ListaDeCorpos { /*Classe para controlar lista de "personagens"*/
+ private:
+    std::vector<Corpo*> *corpos;
+
+  public:
+    ListaDeCorpos();
+    void add_corpo(Corpo *c);
+    std::vector<Corpo*> *get_corpos();
+};
+
+/*Classe para controlar a tela*/
 class Tela{
   private:
     int maxI, maxJ;

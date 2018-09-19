@@ -1,6 +1,10 @@
 #include "model.hpp"
 #include <ncurses.h>
 
+
+ListaDeCorpos::ListaDeCorpos() {
+  this->corpos = new std::vector<Corpo *>(0);
+}
 Tela::Tela(int maxI, int maxJ, float maxX, float maxY){
   this->maxI = maxI;
   this->maxJ = maxJ;
@@ -8,7 +12,13 @@ Tela::Tela(int maxI, int maxJ, float maxX, float maxY){
   this->maxY = maxY;
 
 }
+void ListaDeCorpos::add_corpo(Corpo *c) {
+  (this->corpos)->push_back(c);
+}
 
+std::vector<Corpo*> *ListaDeCorpos::get_corpos() {
+  return (this->corpos);
+}
 void Tela::init(){
   initscr(); /*Start curses mode*/
   raw();
@@ -26,7 +36,27 @@ void Tela::update(int new_pos_i, int new_pos_j){
   if(i<0){
     i=0;
   }
+  /*Desenhar corpos na tela*/
+  std::vector<Corpo *> *corpos = this->lista->get_corpos();
+  for (int k=0; k<corpos->size(); k++)
+  {
+    i = (int) ((*corpos)[k]->get_posicao())* \
+        (this->maxI / this->maxX);
 
+    if(i < linha && i > 0){
+      move(i, k);   /* Move cursor to position */
+      echochar('*');  /* Prints character, advances a position */
+    }
+    if(i < 0){
+      i = 0;
+    }
+    // Atualiza corpos antigos
+    (*corpos_old)[k]->update(  (*corpos)[k]->get_velocidade(),\
+                               (*corpos)[k]->get_posicao(),\
+                               (*corpos)[k]->get_aceleracao());
+  }
+  //Atualiza tela
+  refresh();
 
 }
 
