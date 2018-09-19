@@ -7,6 +7,21 @@ Corpo::Corpo(char avatar, float velocidade, float posicao) {
   this->posicao = posicao;
 
 }
+void Corpo::update(float nova_velocidade, float nova_posicao) {
+  this->velocidade = nova_velocidade;
+  this->posicao = nova_posicao;
+}
+float Corpo::get_velocidade() {
+  return this->velocidade;
+}
+
+float Corpo::get_posicao() {
+  return this->posicao;
+}
+
+char Corpo::get_avatar() {
+  return this->avatar;
+}
 
 
 
@@ -62,7 +77,7 @@ void Tela::update(int new_pos_i, int new_pos_j){
 
     if(i < linha && i > 0){
       move(i, k);   /* Move cursor to position */
-      echochar('*');  /* Prints character, advances a position */
+      echochar((*corpos)[k]->get_avatar());  /* Prints character, advances a position */
     }
     if(i < 0){
       i = 0;

@@ -14,6 +14,7 @@ class Corpo { /*Classe para criar o personagem e as caracteristicas*/
   void update(float nova_velocidade,float nova_posicao);
   float get_velocidade();
   float get_posicao();
+  char get_avatar();
 };
 class ListaDeCorpos { /*Classe para controlar lista de "personagens"*/
  private:
