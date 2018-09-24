@@ -1,7 +1,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
-
+#include <vector>
 #include<thread>
+
 class Corpo { /*Classe para criar o personagem e as caracteristicas*/
   private:
   char avatar; /*Caractere que define o personagem*/
@@ -16,12 +17,14 @@ class Corpo { /*Classe para criar o personagem e as caracteristicas*/
   float get_posicao();
   char get_avatar();
 };
+
 class ListaDeCorpos { /*Classe para controlar lista de "personagens"*/
  private:
     std::vector<Corpo*> *corpos;
 
   public:
     ListaDeCorpos();
+    void hard_copy(ListaDeCorpos *ldc);
     void add_corpo(Corpo *c);
     std::vector<Corpo*> *get_corpos();
 };
@@ -29,11 +32,12 @@ class ListaDeCorpos { /*Classe para controlar lista de "personagens"*/
 /*Classe para controlar a tela*/
 class Tela{
   private:
+    ListaDeCorpos *lista, *lista_anterior;
     int maxI, maxJ;
     float maxX, maxY;
 
   public:
-    Tela(int maxI, int maxJ, float maxX, float maxY);
+    Tela(ListaDeCorpos *ldc, int maxI, int maxJ, float maxX, float maxY);
     ~Tela();
     void init();
     void stop();

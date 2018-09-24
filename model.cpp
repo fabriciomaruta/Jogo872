@@ -1,6 +1,6 @@
 #include "model.hpp"
 #include <ncurses.h>
-
+#include <vector>
 Corpo::Corpo(char avatar, float velocidade, float posicao) {
   this->avatar = avatar;/*bonequinho do player ou inimigo*/
   this->velocidade = velocidade;
@@ -31,26 +31,52 @@ ListaDeCorpos::ListaDeCorpos() {
 void ListaDeCorpos::add_corpo(Corpo *c) {
   (this->corpos)->push_back(c);
 }
+void ListaDeCorpos::hard_copy(ListaDeCorpos *ldc) {
+  std::vector<Corpo *> *corpos = ldc->get_corpos();
 
+  for (int k=0; k<corpos->size(); k++) {
+    Corpo *c = new Corpo( (*corpos)[k]->get_posicao(),\
+                          (*corpos)[k]->get_velocidade(),\
+                           (*corpos)[k]->get_avatar());
+    this->add_corpo(c);
+  }
+
+}
 std::vector<Corpo*> *ListaDeCorpos::get_corpos() {
   return (this->corpos);
 }
 
 
-Tela::Tela(int maxI, int maxJ, float maxX, float maxY){
+Tela::Tela(ListaDeCorpos *ldc,int maxI, int maxJ, float maxX, float maxY){
+  this->lista = ldc;
+  this->lista_anterior = new ListaDeCorpos();
+  this->lista_anterior->hard_copy(this->lista);
   this->maxI = maxI;
   this->maxJ = maxJ;
   this->maxX = maxX;
   this->maxY = maxY;
 
 }
-void ListaDeCorpos::add_corpo(Corpo *c) {
-  (this->corpos)->push_back(c);
+
+void Tela::stop() {
+  endwin();
 }
 
-std::vector<Corpo*> *ListaDeCorpos::get_corpos() {
-  return (this->corpos);
+Tela::~Tela() {
+  this->stop();;
 }
+void threadfun (char *keybuffer, int *control)
+{
+  char c;
+  while ((*control) == 1) {
+    c = getch();
+    if (c!=ERR) (*keybuffer) = c;
+    else (*keybuffer) = 0;
+    std::this_thread::sleep_for (std::chrono::milliseconds(10));
+  }
+  return;
+}
+
 void Tela::init(){
   initscr(); /*Start curses mode*/
   raw();
@@ -60,6 +86,7 @@ void Tela::init(){
 void Tela::update(int new_pos_i, int new_pos_j){
   int i ;
   int linha, coluna;
+  std::vector<Corpo *> *corpos_old = this->lista_anterior->get_corpos();
   getmaxyx(stdscr, linha, coluna); /*linha e coluna armazenam o tamanho da tela*/
   if(i<linha && i > 0){ /*Verifica se esta nos limites*/
     move(new_pos_i, new_pos_j);
@@ -84,8 +111,7 @@ void Tela::update(int new_pos_i, int new_pos_j){
     }
     // Atualiza corpos antigos
     (*corpos_old)[k]->update(  (*corpos)[k]->get_velocidade(),\
-                               (*corpos)[k]->get_posicao(),\
-                               (*corpos)[k]->get_aceleracao());
+                               (*corpos)[k]->get_posicao());
   }
   //Atualiza tela
   refresh();
@@ -115,7 +141,7 @@ void Teclado::init(){
 
 void Teclado::stop(){
   this->rodando = 0;
-  (this->kb->thread).join();
+  (this->kb_thread).join();
 }
 
 char Teclado::getchar(){
